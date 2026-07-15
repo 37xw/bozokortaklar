@@ -86,7 +86,7 @@ a{text-decoration:none;color:inherit}
 .pc-badge{position:absolute;font-weight:700;border-radius:4px;letter-spacing:.2px}
 .pc-badge.hot{background:var(--orange);color:#000;font-size:10px;padding:3px 8px;top:12px;right:12px}
 .pc-badge.sites-badge{background:var(--bg3);border:1px solid var(--border);color:var(--fg2);font-size:10px;padding:3px 8px;top:12px;right:12px}
-.pc-badge.firsat{background:var(--accent);color:#fff;font-size:12px;padding:6px 12px;top:10px;right:10px;text-shadow:0 1px 2px rgba(0,0,0,.3);box-shadow:0 2px 8px rgba(220,38,38,.4)}
+.pc-badge.firsat{position:relative;background:var(--accent);color:#fff;font-size:14px;font-weight:800;padding:8px 16px;border-radius:0 0 8px 8px;text-align:center;width:100%;box-shadow:0 4px 12px rgba(220,38,38,.5);letter-spacing:.3px}
 
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.open{opacity:1;pointer-events:auto}
@@ -280,7 +280,7 @@ function renderProducts(){
     const bestPrice=p.prices[0]?.price||0;
     const secondPrice=p.prices[1]?.price||bestPrice;
     const discountPct=secondPrice>0?Math.round((1-bestPrice/secondPrice)*100):0;
-    const showFirsat=start+idx<5&&bestPrice>0;
+    const showFirsat=bestPrice>=700&&p.saving>0;
 
     return `<div class="product-card" onclick='openModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'>
       ${showFirsat?`<div class="pc-badge firsat">Bu firsat kacmaz ortak</div>`:
