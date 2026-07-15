@@ -83,9 +83,10 @@ a{text-decoration:none;color:inherit}
 .pc-meta{font-size:11px;color:var(--fg3)}
 .pc-meta b{color:var(--fg2)}
 
-.pc-badge{position:absolute;top:12px;right:12px;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px}
-.pc-badge.hot{background:var(--orange);color:#000}
-.pc-badge.sites-badge{background:var(--bg3);border:1px solid var(--border);color:var(--fg2)}
+.pc-badge{position:absolute;font-weight:700;border-radius:4px;letter-spacing:.2px}
+.pc-badge.hot{background:var(--orange);color:#000;font-size:10px;padding:3px 8px;top:12px;right:12px}
+.pc-badge.sites-badge{background:var(--bg3);border:1px solid var(--border);color:var(--fg2);font-size:10px;padding:3px 8px;top:12px;right:12px}
+.pc-badge.firsat{background:var(--accent);color:#fff;font-size:11px;padding:4px 10px;top:12px;right:12px}
 
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.open{opacity:1;pointer-events:auto}
@@ -274,15 +275,17 @@ function renderProducts(){
 
   if(!items.length){grid.innerHTML='<div style="text-align:center;padding:80px 20px;color:var(--fg3);grid-column:1/-1">Urun bulunamadi.</div>';return;}
 
-  grid.innerHTML=items.map(p=>{
+  grid.innerHTML=items.map((p,idx)=>{
     const isMulti=p.prices.length>1;
     const bestPrice=p.prices[0]?.price||0;
     const secondPrice=p.prices[1]?.price||bestPrice;
     const discountPct=secondPrice>0?Math.round((1-bestPrice/secondPrice)*100):0;
+    const showFirsat=start+idx<5&&bestPrice>0;
 
     return `<div class="product-card" onclick='openModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'>
-      ${discountPct>=10?`<div class="pc-badge hot">%${discountPct}</div>`:
-        (isMulti?`<div class="pc-badge sites-badge">${p.prices.length} site</div>`:'')}
+      ${showFirsat?`<div class="pc-badge firsat">Bu firsat kacmaz ortak</div>`:
+        (discountPct>=10?`<div class="pc-badge hot">%${discountPct}</div>`:
+          (isMulti?`<div class="pc-badge sites-badge">${p.prices.length} site</div>`:''))}
       <div class="pc-top">
         <img class="pc-img" src="${p.image}" alt="" loading="lazy" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'pc-img-ph',innerHTML:'<span class=ph-brand>BIODERMA</span>'}))">
         <div class="pc-info">
